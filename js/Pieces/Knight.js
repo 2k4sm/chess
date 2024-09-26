@@ -1,32 +1,31 @@
-// Knight.js
 import Piece from './Piece.js';
 import { posinbounds } from '../utility.js';
 
-class Knight extends Piece{
-    constructor(color, position){
-        super(color, position);
+class Knight extends Piece {
+    constructor(color, pos) {
+        super(color, pos);
         this.type = 'knight';
     }
 
-    moves(board){
-
-        const movesDir = [
-            { x: -2, y: -1 }, { x: -2, y: 1 },
-            { x: -1, y: -2 }, { x: -1, y: 2 },
-            { x: 1, y: -2 }, { x: 1, y: 2 },
-            { x: 2, y: -1 }, { x: 2, y: 1 }
-        ];
-
+    moves() {
         let possibleMoves = [];
 
-        for(let dir of movesDir){
-            const newPos = { x: this.pos.x + dir.x, y: this.pos.y + dir.y };
+        let directions = [
+            { dx: -2, dy: -1 }, { dx: -2, dy: 1 },
+            { dx: -1, dy: -2 }, { dx: -1, dy: 2 },
+            { dx: 1, dy: -2 }, { dx: 1, dy: 2 },
+            { dx: 2, dy: -1 }, { dx: 2, dy: 1 }
+        ];
 
-            if(posinbounds(newPos)){
-                const targetPiece = board[newPos.x][newPos.y];
-                
-                if(!targetPiece || targetPiece.color !== this.color){
-                    possibleMoves.push(newPos);
+        for(let dir of directions){
+            let x = this.pos.x + dir.dx;
+            let y = this.pos.y + dir.dy;
+
+            if(posinbounds({ x, y })){
+                let piece = window.bobj.getpiece({ x, y });
+
+                if(!piece || piece.color !== this.color){
+                    possibleMoves.push({ x, y });
                 }
             }
         }
