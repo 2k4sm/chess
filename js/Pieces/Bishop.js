@@ -7,30 +7,29 @@ class Bishop extends Piece {
         this.type = 'bishop';
     }
 
-    moves(board) {
-        const directions = [
-            { x: 1, y: 1 },
-            { x: 1, y: -1 },
-            { x: -1, y: 1 },
-            { x: -1, y: -1 }
-        ];
+  
+    moves() {
         let possibleMoves = [];
+        const dx = [1, 1, -1, -1];
+        const dy = [1, -1, 1, -1];
 
-        for (let direction of directions) {
-            let x = this.pos.x + direction.x;
-            let y = this.pos.y + direction.y;
+        for (let i = 0; i < 4; i++) {
+            let x = this.pos.x + dx[i];
+            let y = this.pos.y + dy[i];
 
             while (posinbounds({ x, y })) {
-                if (board[x][y] === null) {
-                    possibleMoves.push({ x, y });
-                } else if (board[x][y].color !== this.color) {
-                    possibleMoves.push({ x, y });
-                    break;
-                } else {
+                let piece = window.bobj.getpiece({ x, y });
+
+                if (piece) {
+                    if (piece.color !== this.color) {
+                        possibleMoves.push({ x, y });
+                    }
                     break;
                 }
-                x += direction.x;
-                y += direction.y;
+
+                possibleMoves.push({ x, y });
+                x += dx[i];
+                y += dy[i];
             }
         }
 
@@ -38,4 +37,6 @@ class Bishop extends Piece {
     }
 }
 
+
 export default Bishop;
+

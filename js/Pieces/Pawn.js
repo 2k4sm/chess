@@ -7,36 +7,73 @@ class Pawn extends Piece {
         this.type = 'pawn';
     }
 
-    moves(board) {
-        let possibleMoves = [];
-        let direction = this.color ? 1 : -1; // White moves up (-1), Black moves down (1)
-        let startRow = this.color ? 1 : 6; // Starting row for white and black pawns
-
-        // Move forward one square
-        let forwardPos = { x: this.pos.x + direction, y: this.pos.y };
-        if (posinbounds(forwardPos) && board[forwardPos.x][forwardPos.y] === null) {
-            possibleMoves.push(forwardPos);
-
-            // Move forward two squares if on starting row
-            if (this.pos.x === startRow) {
-                let doubleForwardPos = { x: this.pos.x + 2 * direction, y: this.pos.y };
-                if (board[doubleForwardPos.x][doubleForwardPos.y] === null) {
-                    possibleMoves.push(doubleForwardPos);
+    moves() {
+        let moves = [];
+        let x = this.pos.x;
+        let y = this.pos.y;
+        let bobj = window.bobj;
+        if(this.color) // black
+        {
+            if (x === 1)
+            {
+                if (!bobj.getpiece({x: x + 1, y}))
+                {
+                    moves.push({x: x + 1, y});
+                    if (!bobj.getpiece({x: x + 2, y}))
+                    {
+                        moves.push({x: x + 2, y});
+                    }
+                }
+            } 
+            else
+            {
+                if (!bobj.getpiece({x: x + 1, y}))
+                {
+                    moves.push({x: x + 1, y});
                 }
             }
+            // Capture
+            if (bobj.getpiece({x: x + 1, y: y + 1}) && bobj.getpiece({x: x + 1, y: y + 1}).color !== this.color)
+            {
+                moves.push({x: x + 1, y: y + 1});
+            }
+            if (bobj.getpiece({x: x + 1, y: y - 1}) && bobj.getpiece({x: x + 1, y: y - 1}).color !== this.color)
+            {
+                moves.push({x: x + 1, y: y - 1});
+            }
         }
+        else
+        {
+            if (x === 6)
+            {
+                if (!bobj.getpiece({x: x - 1, y}))
+                {
+                    moves.push({x: x - 1, y});
+                    if (!bobj.getpiece({x: x - 2, y}))
+                    {
+                        moves.push({x: x - 2, y});
+                    }
+                }
+            } 
+            else
+            {
+                if (!bobj.getpiece({x: x - 1, y}))
+                {
+                    moves.push({x: x - 1, y});
+                }
+            }
+            // Capture
+            if (bobj.getpiece({x: x - 1, y: y + 1}) && bobj.getpiece({x: x - 1, y: y + 1}).color !== this.color)
+            {
+                moves.push({x: x - 1, y: y + 1});
+            }
+            if (bobj.getpiece({x: x - 1, y: y - 1}) && bobj.getpiece({x: x - 1, y: y - 1}).color !== this.color)
+            {
+                moves.push({x: x - 1, y: y - 1});
+            }
+        }
+        return moves;
 
-        // Capture diagonally
-        let captureLeft = { x: this.pos.x + direction, y: this.pos.y - 1 };
-        let captureRight = { x: this.pos.x + direction, y: this.pos.y + 1 };
-        if (posinbounds(captureLeft) && board[captureLeft.x][captureLeft.y] !== null && board[captureLeft.x][captureLeft.y].color !== this.color) {
-            possibleMoves.push(captureLeft);
-        }
-        if (posinbounds(captureRight) && board[captureRight.x][captureRight.y] !== null && board[captureRight.x][captureRight.y].color !== this.color) {
-            possibleMoves.push(captureRight);
-        }
-
-        return possibleMoves;
     }
 }
 
