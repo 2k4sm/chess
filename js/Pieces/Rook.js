@@ -1,4 +1,5 @@
 import Piece from "./Piece.js";
+import { posinbounds } from '../utility.js';
 class Rook extends Piece {
     constructor(color, pos) {
         super(color, pos);
