@@ -15,7 +15,7 @@ class Queen extends Piece {
             let x = this.pos.x + dx[i];
             let y = this.pos.y + dy[i];
 
-            while (this.posinbounds({ x, y })) {
+            while (posinbounds({ x, y })) {
                 let piece = window.bobj.getpiece({ x, y });
 
                 if (piece) {
