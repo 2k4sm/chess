@@ -112,6 +112,62 @@ const getMoves = (color) => {
     return moves;
 }
 
+const dehighlightMoves = () => {
+    const squares = Array.from(document.getElementsByClassName('square'));
+    squares.forEach(square => {
+        square.querySelector('.highlight').style.display = 'none';
+    });
+};
+
+const filterMoves = (moves) => {
+    const filteredMoves = {};
+
+    for (const piece in moves) {
+        const piecePos = idtopos(piece);
+        const pieceObj = bobj.getpiece(piecePos);
+        const possibleMoves = moves[piece];
+        const validMoves = [];
+
+        possibleMoves.forEach(move => {
+            const capturedPiece = bobj.getpiece(move);
+            bobj.setpiece(pieceObj, move);
+            bobj.setpiece(null, piecePos);
+
+            if (!isKingInCheck(bobj.turn)) validMoves.push(move);
+
+            bobj.setpiece(pieceObj, piecePos);
+            bobj.setpiece(capturedPiece, move);
+        });
+
+        filteredMoves[piece] = validMoves;
+    }
+
+    return filteredMoves;
+};
+
+const highlightMoves = (moves, pieceId) => {
+    const squares = Array.from(document.getElementsByClassName('square'));
+    const pieceMoves = moves[pieceId];
+
+    pieceMoves.forEach(move => {
+        const index = _2dto1d(move);
+        const highlight = squares[index].querySelector('.highlight');
+        highlight.style.display = 'block';
+    });
+};
+
+const isKingInCheck = (color) => {
+    const kingPos = bobj.getKingPos(color);
+    const pieces = bobj.pieces();
+
+    return pieces.some(piece => {
+        if (piece.color !== color) {
+            const pieceMoves = piece.moves();
+            return pieceMoves.some(move => move.x === kingPos.x && move.y === kingPos.y);
+        }
+        return false;
+    });
+};
 
 
 
@@ -126,4 +182,7 @@ export {
     setPieces,
     getMoves,
     _2dto1d,
+    highlightMoves,
+    filterMoves,
+    dehighlightMoves
 };
