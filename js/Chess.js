@@ -13,6 +13,7 @@ class Chess {
             for (let j = 0; j < 8; j++)
                 this.board[i].push(null);
         }
+
         // black pieces
         this.board[0][0] = new Rook(true, { x: 0, y: 0 });
         this.board[0][1] = new Knight(true, { x: 0, y: 1 });
@@ -46,6 +47,40 @@ class Chess {
         this.piece_selected = null;
     }
 
+    pieces() {
+        let pieces = [];
+        for (let i = 0; i < 8; i++)
+            for (let j = 0; j < 8; j++)
+                if (this.board[i][j])
+                    pieces.push(this.board[i][j]);
+        return pieces;
+    }
+    getKingPos(color) {
+        return color ? this.blackKing : this.whiteKing;
+    }
+    setpiece(piece, pos) {
+        this.board[pos.x][pos.y] = piece;
+        if (piece === null) return;
+        if (piece.type === 'king') {
+            if (!piece.color) this.whiteKing = pos;
+            else this.blackKing = pos;
+        }
+        piece.setpos(pos);
+    }
+    getpiece(pos) {
+        return this.board[pos.x][pos.y];
+    }
+    move(from, to) {
+        let piece = this.getpiece(from);
+        let capturedPiece = this.getpiece(to);
+        this.setpiece(null, from);
+        this.setpiece(piece, to);
+        this.moves.push({ from, to, piece, capturedPiece });
+        if (piece.type === 'king') {
+            if (!piece.color) this.whiteKing = to;
+            else this.blackKing = to;
+        }
+    }
 }
 
 export default Chess;
