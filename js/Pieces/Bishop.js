@@ -7,6 +7,7 @@ class Bishop extends Piece {
         this.type = 'bishop';
     }
 
+  
     moves() {
         let possibleMoves = [];
         const dx = [1, 1, -1, -1];
@@ -36,4 +37,6 @@ class Bishop extends Piece {
     }
 }
 
+
 export default Bishop;
+

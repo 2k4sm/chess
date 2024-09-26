@@ -1,9 +1,12 @@
 import Piece from './Piece.js';
+import { posinbounds } from '../utility.js';
+
 class Pawn extends Piece {
     constructor(color, pos) {
         super(color, pos);
-        super.type = 'pawn';
+        this.type = 'pawn';
     }
+
     moves() {
         let moves = [];
         let x = this.pos.x;
@@ -70,6 +73,8 @@ class Pawn extends Piece {
             }
         }
         return moves;
+
     }
 }
+
 export default Pawn;
