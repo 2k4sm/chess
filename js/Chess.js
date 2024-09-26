@@ -4,6 +4,7 @@ import Knight from './Pieces/Knight.js';
 import Bishop from './Pieces/Bishop.js';
 import Queen from './Pieces/Queen.js';
 import King from './Pieces/King.js';
+import { posinbounds } from './utility.js'
 // import Piece from './Pieces/Piece.js';
 class Chess {
     constructor() {
@@ -59,16 +60,20 @@ class Chess {
         return color ? this.blackKing : this.whiteKing;
     }
     setpiece(piece, pos) {
-        this.board[pos.x][pos.y] = piece;
-        if (piece === null) return;
-        if (piece.type === 'king') {
-            if (!piece.color) this.whiteKing = pos;
-            else this.blackKing = pos;
+        if (posinbounds(pos)) {
+            this.board[pos.x][pos.y] = piece;
+            if (piece === null) return;
+            if (piece.type === 'king') {
+                if (!piece.color) this.whiteKing = pos;
+                else this.blackKing = pos;
+            }
+            piece.setpos(pos);
         }
-        piece.setpos(pos);
     }
     getpiece(pos) {
-        return this.board[pos.x][pos.y];
+        if (posinbounds(pos)) {
+            return this.board[pos.x][pos.y];
+        }
     }
     move(from, to) {
         let piece = this.getpiece(from);

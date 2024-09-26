@@ -113,61 +113,77 @@ const getMoves = (color) => {
 }
 
 const dehighlightMoves = () => {
-    const squares = Array.from(document.getElementsByClassName('square'));
-    squares.forEach(square => {
-        square.querySelector('.highlight').style.display = 'none';
+    let squares = Array.from(document.getElementsByClassName('square'));
+    squares.forEach((s, i) => {
+        s.querySelector('.highlight').style.display = 'none';
     });
-};
+}
 
 const filterMoves = (moves) => {
-    const filteredMoves = {};
+    let filteredMoves = {};
 
-    for (const piece in moves) {
-        const piecePos = idtopos(piece);
-        const pieceObj = bobj.getpiece(piecePos);
-        const possibleMoves = moves[piece];
-        const validMoves = [];
+    for (let piece in moves) {
+        let piecePos = idtopos(piece);
+        let pieceObj = bobj.getpiece(piecePos);
+        let possibleMoves = moves[piece];
 
-        possibleMoves.forEach(move => {
-            const capturedPiece = bobj.getpiece(move);
+        if (!Array.isArray(possibleMoves)) continue; // Ensure possibleMoves is iterable
+
+        let validMoves = [];
+
+        for (let move of possibleMoves) {
+            let capturedPiece = bobj.getpiece(move);
             bobj.setpiece(pieceObj, move);
             bobj.setpiece(null, piecePos);
 
-            if (!isKingInCheck(bobj.turn)) validMoves.push(move);
+            if (!isKingInCheck(bobj.turn)) {
+                validMoves.push(move);
+            }
 
             bobj.setpiece(pieceObj, piecePos);
             bobj.setpiece(capturedPiece, move);
-        });
-
+        }
         filteredMoves[piece] = validMoves;
     }
 
     return filteredMoves;
-};
+}
 
 const highlightMoves = (moves, pieceId) => {
-    const squares = Array.from(document.getElementsByClassName('square'));
-    const pieceMoves = moves[pieceId];
+    let squares = Array.from(document.getElementsByClassName('square'));
+    let pieceMoves = moves[pieceId];
+
+    if (!Array.isArray(pieceMoves)) return; // Ensure pieceMoves is iterable
 
     pieceMoves.forEach(move => {
-        const index = _2dto1d(move);
-        const highlight = squares[index].querySelector('.highlight');
-        highlight.style.display = 'block';
+        if (posinbounds(move)) {
+            let index = _2dto1d(move);
+            let square = squares[index];
+            let highlight = square.querySelector('.highlight');
+            highlight.style.display = 'block';
+        }
     });
-};
+}
 
 const isKingInCheck = (color) => {
-    const kingPos = bobj.getKingPos(color);
-    const pieces = bobj.pieces();
+    let kingPos = bobj.getKingPos(color);
+    let pieces = bobj.pieces();
 
-    return pieces.some(piece => {
+    for (let piece of pieces) {
         if (piece.color !== color) {
-            const pieceMoves = piece.moves();
-            return pieceMoves.some(move => move.x === kingPos.x && move.y === kingPos.y);
+            let pieceMoves = piece.moves();
+
+            if (!Array.isArray(pieceMoves)) continue; // Ensure pieceMoves is iterable
+
+            for (let move of pieceMoves) {
+                if (move.x === kingPos.x && move.y === kingPos.y) {
+                    return true;
+                }
+            }
         }
-        return false;
-    });
-};
+    }
+    return false;
+}
 
 
 

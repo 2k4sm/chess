@@ -28,7 +28,8 @@ squares.forEach((square, index) => {
                 selectedPiece = null;
                 dehighlightMoves();
                 bobj.turn = !bobj.turn;
-                moves = filterMoves(getMoves(bobj.turn));
+                moves = getMoves(bobj.turn)
+                moves = filterMoves(moves);
             } else if (piece && piece.color === bobj.turn) {
                 selectedPiece = piece;
                 dehighlightMoves();
