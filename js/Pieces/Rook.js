@@ -1,15 +1,14 @@
 import { posinbounds } from '../utility.js';
 
 function Rook(color, pos) {
-    Piece.call(this, color, pos); // Call the parent constructor
+    Piece.call(this, color, pos);
     this.type = 'rook';
 }
 
-// Inherit from Piece
 Rook.prototype = Object.create(Piece.prototype);
 Rook.prototype.constructor = Rook;
 
-// Define the moves method on the prototype
+
 Rook.prototype.moves = function() {
     let possibleMoves = [];
     let dx = [1, 0, -1, 0];

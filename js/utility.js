@@ -112,6 +112,78 @@ const getMoves = (color) => {
     return moves;
 }
 
+const dehighlightMoves = () => {
+    let squares = Array.from(document.getElementsByClassName('square'));
+    squares.forEach((s, i) => {
+        s.querySelector('.highlight').style.display = 'none';
+    });
+}
+
+const filterMoves = (moves) => {
+    let filteredMoves = {};
+
+    for (let piece in moves) {
+        let piecePos = idtopos(piece);
+        let pieceObj = bobj.getpiece(piecePos);
+        let possibleMoves = moves[piece];
+
+        if (!Array.isArray(possibleMoves)) continue; // Ensure possibleMoves is iterable
+
+        let validMoves = [];
+
+        for (let move of possibleMoves) {
+            let capturedPiece = bobj.getpiece(move);
+            bobj.setpiece(pieceObj, move);
+            bobj.setpiece(null, piecePos);
+
+            if (!isKingInCheck(bobj.turn)) {
+                validMoves.push(move);
+            }
+
+            bobj.setpiece(pieceObj, piecePos);
+            bobj.setpiece(capturedPiece, move);
+        }
+        filteredMoves[piece] = validMoves;
+    }
+
+    return filteredMoves;
+}
+
+const highlightMoves = (moves, pieceId) => {
+    let squares = Array.from(document.getElementsByClassName('square'));
+    let pieceMoves = moves[pieceId];
+
+    if (!Array.isArray(pieceMoves)) return; // Ensure pieceMoves is iterable
+
+    pieceMoves.forEach(move => {
+        if (posinbounds(move)) {
+            let index = _2dto1d(move);
+            let square = squares[index];
+            let highlight = square.querySelector('.highlight');
+            highlight.style.display = 'block';
+        }
+    });
+}
+
+const isKingInCheck = (color) => {
+    let kingPos = bobj.getKingPos(color);
+    let pieces = bobj.pieces();
+
+    for (let piece of pieces) {
+        if (piece.color !== color) {
+            let pieceMoves = piece.moves();
+
+            if (!Array.isArray(pieceMoves)) continue; // Ensure pieceMoves is iterable
+
+            for (let move of pieceMoves) {
+                if (move.x === kingPos.x && move.y === kingPos.y) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 
 
 
@@ -126,4 +198,7 @@ export {
     setPieces,
     getMoves,
     _2dto1d,
+    highlightMoves,
+    filterMoves,
+    dehighlightMoves
 };
