@@ -177,6 +177,7 @@ const isKingInCheck = (color) => {
 
             for (let move of pieceMoves) {
                 if (move.x === kingPos.x && move.y === kingPos.y) {
+                    alert(`${color} Your King is in check`)
                     return true;
                 }
             }
