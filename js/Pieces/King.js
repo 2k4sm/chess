@@ -1,35 +1,35 @@
 import Piece from './Piece.js';
 import { posinbounds } from '../utility.js';
-export default
-    class King extends Piece {
-    constructor(color, pos) {
-        super(color, pos);
-        this.type = 'king';
-    }
 
-    moves() {
-        const directions = [
-            { dx: -1, dy: -1 }, { dx: -1, dy: 0 }, { dx: -1, dy: 1 },
-            { dx: 0, dy: -1 }, { dx: 0, dy: 1 },
-            { dx: 1, dy: -1 }, { dx: 1, dy: 0 }, { dx: 1, dy: 1 }
-        ];
+export default function King(color, pos) {
+    Piece.call(this, color, pos);
+    this.type = 'king';
+}
 
-        let possibleMoves = [];
+King.prototype = Object.create(Piece.prototype);
+King.prototype.constructor = King;
 
-        directions.forEach(({ dx, dy }) => {
-            const newX = this.pos.x + dx;
-            const newY = this.pos.y + dy;
+King.prototype.moves = function () {
+    const directions = [
+        { dx: -1, dy: -1 }, { dx: -1, dy: 0 }, { dx: -1, dy: 1 },
+        { dx: 0, dy: -1 }, { dx: 0, dy: 1 },
+        { dx: 1, dy: -1 }, { dx: 1, dy: 0 }, { dx: 1, dy: 1 }
+    ];
 
-            if (!posinbounds({ x: newX, y: newY })) return;
+    let possibleMoves = [];
 
-            const pieceAtPosition = window.bobj.getpiece({ x: newX, y: newY });
+    directions.forEach(({ dx, dy }) => {
+        const newX = this.pos.x + dx;
+        const newY = this.pos.y + dy;
 
-            if (pieceAtPosition && pieceAtPosition.color === this.color) return;
+        if (!posinbounds({ x: newX, y: newY })) return;
 
-            possibleMoves.push({ x: newX, y: newY });
-        });
+        const pieceAtPosition = window.bobj.getpiece({ x: newX, y: newY });
 
-        return possibleMoves;
+        if (pieceAtPosition && pieceAtPosition.color === this.color) return;
 
-    }
+        possibleMoves.push({ x: newX, y: newY });
+    });
+
+    return possibleMoves;
 }
