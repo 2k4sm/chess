@@ -138,6 +138,8 @@ const filterMoves = (moves) => {
 
             if (!isKingInCheck(bobj.turn)) {
                 validMoves.push(move);
+            } else {
+                alert("King is in Check.")
             }
 
             bobj.setpiece(pieceObj, piecePos);
