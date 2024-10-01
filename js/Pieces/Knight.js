@@ -1,7 +1,8 @@
+import Piece from './Piece.js';
 import { posinbounds } from '../utility.js';
 
 function Knight(color, pos) {
-    Piece.call(this, color, pos);  // Inherit properties from Piece
+    Piece.call(this, color, pos); 
     this.type = 'knight';
 }
 
