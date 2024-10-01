@@ -99,6 +99,7 @@ const setPieces = (board8v8) => // board8v8 is an 2d array of pieces objects
         img.src = imgpath[color][type];
         square.appendChild(img);
     }
+    highlightKingInCheck();
 }
 const getMoves = (color) => {
     // return a obj with keys as piece id and values as array of possible moves
@@ -185,7 +186,28 @@ const isKingInCheck = (color) => {
     return false;
 }
 
+const highlightKingInCheck = () => {
+    let squares = Array.from(document.getElementsByClassName('square'));
 
+    squares.forEach(square => {
+        square.style.backgroundColor = '';
+    });
+
+    let whiteKingPos = bobj.getKingPos(false);
+    let blackKingPos = bobj.getKingPos(true);
+
+    if (isKingInCheck(false)) {
+        let index = _2dto1d(whiteKingPos);
+        let kingSquare = squares[index];
+        kingSquare.style.backgroundColor = 'red';
+    };
+
+    if (isKingInCheck(true)) {
+        let index = _2dto1d(blackKingPos);
+        let kingSquare = squares[index];
+        kingSquare.style.backgroundColor = 'red';
+    }
+}
 
 export {
     idtopos,
