@@ -12,7 +12,7 @@ function Chess() {
         this.board.push([]);
         for (let j = 0; j < 8; j++) this.board[i].push(null);
     }
-
+    //black
     this.board[0][0] = new Rook(true, { x: 0, y: 0 });
     this.board[0][1] = new Knight(true, { x: 0, y: 1 });
     this.board[0][2] = new Bishop(true, { x: 0, y: 2 });
@@ -23,6 +23,7 @@ function Chess() {
     this.board[0][7] = new Rook(true, { x: 0, y: 7 });
     for (let i = 0; i < 8; i++) this.board[1][i] = new Pawn(true, { x: 1, y: i });
 
+    //white
     this.board[7][0] = new Rook(false, { x: 7, y: 0 });
     this.board[7][1] = new Knight(false, { x: 7, y: 1 });
     this.board[7][2] = new Bishop(false, { x: 7, y: 2 });
